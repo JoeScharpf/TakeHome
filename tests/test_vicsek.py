@@ -59,6 +59,14 @@ def test_neighbor_mask_across_boundary():
     assert mask[1, 0]
 
 
+def test_neighbor_mask_includes_self():
+    positions = np.array([[1.0, 1.0], [3.0, 3.0]])
+    mask = neighbor_mask(positions, L=5.0, R=1.0)
+
+    assert mask[0, 0]
+    assert mask[1, 1]
+
+
 def test_position_update_uses_current_heading():
     params = VicsekParams(N=2, L=5.0, R=2.0, v=1.0, dt=0.25)
     positions = np.array(
