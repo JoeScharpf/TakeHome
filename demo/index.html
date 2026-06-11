@@ -151,10 +151,16 @@
           </div>
 
           <p>
-            The neighbor set is
-            \(s_i(t)=\{j : |\mathbf{r}_i(t)-\mathbf{r}_j(t)|<R\}\) using
-            <em>minimum-image</em> distances across periodic boundaries, and
-            \(\xi_i(t)\sim\mathrm{Uniform}(-\pi,\pi)\).
+            Neighbors are pairs within interaction radius <strong>R</strong>, measured with
+            <em>minimum-image</em> distances across periodic boundaries:
+          </p>
+          <div class="equation-block">
+            \[
+            s_i(t)=\{j : |\mathbf{r}_i(t)-\mathbf{r}_j(t)| \lt R\}
+            \]
+          </div>
+          <p>
+            Noise satisfies \(\xi_i(t)\sim\mathrm{Uniform}(-\pi,\pi)\).
             Positions advance using the <strong>current</strong> heading \(\Theta_i(t)\), not
             \(\Theta_i(t+\Delta t)\).
           </p>
