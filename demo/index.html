@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vicsek Dynamics — Problem 1 Demo</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-inner">
+        <h1>Vicsek Dynamics</h1>
+        <p class="subtitle">Interactive simulation of collective motion in a periodic box</p>
+      </div>
+    </header>
+
+    <main class="shell">
+      <nav class="tabs tabs-centered" role="tablist" aria-label="Demo sections">
+        <button
+          type="button"
+          class="tab active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-simulate"
+          id="tab-simulate"
+          data-tab="simulate"
+        >
+          Simulate
+        </button>
+        <button
+          type="button"
+          class="tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-about"
+          id="tab-about"
+          data-tab="about"
+        >
+          About
+        </button>
+      </nav>
+
+      <div class="tab-panels">
+      <div id="panel-simulate" class="panel active" role="tabpanel" aria-labelledby="tab-simulate">
+        <div class="layout">
+          <aside class="controls card">
+            <h2>Parameters</h2>
+
+            <label class="control">
+              <span class="control-label">Noise η</span>
+              <strong class="control-value" id="eta-val">0.50</strong>
+              <input type="range" id="eta" min="0" max="1" step="0.05" value="0.5" />
+            </label>
+
+            <label class="control">
+              <span class="control-label">Radius R</span>
+              <strong class="control-value" id="R-val">1.00</strong>
+              <input type="range" id="R" min="0.3" max="1.5" step="0.05" value="1" />
+            </label>
+
+            <label class="control">
+              <span class="control-label">Speed v</span>
+              <strong class="control-value" id="v-val">1.00</strong>
+              <input type="range" id="v" min="0.5" max="1.8" step="0.05" value="1" />
+            </label>
+
+            <label class="control">
+              <span class="control-label">Particles N</span>
+              <strong class="control-value" id="N-val">125</strong>
+              <input type="range" id="N" min="25" max="250" step="25" value="125" />
+            </label>
+
+            <p id="n-warn" class="warn" hidden>N &gt; 200 may slow the simulation (O(N²) neighbors).</p>
+
+            <div class="btn-row">
+              <button type="button" id="btn-toggle" class="btn primary">Start</button>
+              <button type="button" id="btn-reset" class="btn">Reset</button>
+            </div>
+
+            <div class="btn-row presets">
+              <button type="button" id="btn-low" class="btn preset">Low noise (η=0.1)</button>
+              <button type="button" id="btn-high" class="btn preset">High noise (η=0.9)</button>
+            </div>
+
+            <p class="hint">
+              Presets set η and reset with seed 42. Changing N requires Reset. Fixed: L = 5, Δt = 0.25.
+            </p>
+          </aside>
+
+          <section class="viz card">
+            <div class="metrics">
+              <div class="metric">
+                <span class="metric-label">Polarization P(t)</span>
+                <span class="metric-value" id="polarization">0.000</span>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Time</span>
+                <span class="metric-value" id="time">0.0</span>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Steps</span>
+                <span class="metric-value" id="steps">0</span>
+              </div>
+            </div>
+
+            <div class="canvas-wrap">
+              <canvas id="sim" aria-label="Vicsek particle simulation"></canvas>
+            </div>
+
+            <div class="spark-wrap">
+              <span class="spark-label">P(t) history</span>
+              <canvas id="sparkline" height="72" aria-label="Polarization history sparkline"></canvas>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div id="panel-about" class="panel" role="tabpanel" aria-labelledby="tab-about">
+        <article class="about card prose">
+          <h2>The Vicsek model</h2>
+          <p>
+            This demo simulates <strong>N</strong> self-propelled particles in a two-dimensional
+            periodic box of side <strong>L = 5</strong>. Each particle has position
+            \(\mathbf{r}_i(t)\) and heading \(\Theta_i(t)\). Particles move at speed
+            <strong>v</strong> and tend to align with neighbors within interaction radius
+            <strong>R</strong>, perturbed by noise strength \(\eta \in [0,1]\).
+          </p>
+
+          <h3>Update rules</h3>
+          <p>At each time step \(\Delta t = 0.25\), the simulation applies two synchronous updates:</p>
+
+          <div class="equation-block">
+            \[
+            \Theta_i(t+\Delta t) = \arg\!\left(
+              \frac{1}{|s_i(t)|}\sum_{j\in s_i(t)} v\,e^{i\Theta_j(t)}
+              + \eta\,e^{i\xi_i(t)}
+            \right)
+            \]
+          </div>
+
+          <div class="equation-block">
+            \[
+            \mathbf{r}_i(t+\Delta t) = \mathbf{r}_i(t)
+            + v\,\Delta t\,(\cos\Theta_i(t),\,\sin\Theta_i(t))
+            \]
+          </div>
+
+          <p>
+            The neighbor set is
+            \(s_i(t)=\{j : |\mathbf{r}_i(t)-\mathbf{r}_j(t)|<R\}\) using
+            <em>minimum-image</em> distances across periodic boundaries, and
+            \(\xi_i(t)\sim\mathrm{Uniform}(-\pi,\pi)\).
+            Positions advance using the <strong>current</strong> heading \(\Theta_i(t)\), not
+            \(\Theta_i(t+\Delta t)\).
+          </p>
+
+          <h3>Order parameter</h3>
+          <p>Instantaneous polarization measures global alignment of headings:</p>
+
+          <div class="equation-block">
+            \[
+            P(t) = \left|\frac{1}{N}\sum_{i=1}^{N} e^{i\Theta_i(t)}\right|
+            \]
+          </div>
+
+          <p>
+            \(P(t)\approx 1\) means strong flocking (aligned headings);
+            \(P(t)\approx 0\) means disorder. The live plot and sparkline track \(P(t)\) as the
+            simulation runs.
+          </p>
+
+          <h3>What you should see (Problem 1)</h3>
+          <ul>
+            <li>
+              <strong>Low noise (\(\eta=0.1\)):</strong> after a short transient, \(P(t)\) rises
+              toward 1 and particles form a coordinated flock.
+            </li>
+            <li>
+              <strong>High noise (\(\eta=0.9\)):</strong> \(P(t)\) stays low with fluctuating
+              headings — a disordered state.
+            </li>
+            <li>
+              <strong>Periodic box:</strong> particles leaving one edge re-enter on the opposite
+              side (Pac-Man wrap).
+            </li>
+          </ul>
+
+          <h3>About this demo</h3>
+          <p>
+            Blue dots are particle positions; red segments show heading direction. Sliders let you
+            explore how \(\eta\), \(R\), \(v\), and \(N\) affect flocking. The JavaScript engine
+            mirrors the update rules in <code>vicsek.py</code> qualitatively; random number
+            differences mean trajectories are not bit-identical to the Python runs.
+          </p>
+        </article>
+      </div>
+      </div>
+    </main>
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="vicsek.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

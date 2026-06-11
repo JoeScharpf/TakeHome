@@ -23,6 +23,24 @@ Unit tests cover core invariants (polarization, periodic boundaries, step update
 
 Problem 3 uses a coarse-to-fine grid search over `(R, v)`; target runtime is about 15-25 minutes with the vectorized step implementation.
 
+## Bonus: Interactive explorer
+
+Optional Streamlit UI to explore dynamics and phase transitions interactively. See [`explorer/README.md`](explorer/README.md) for usage details.
+
+```bash
+streamlit run explorer/app.py
+```
+
+## Bonus: Browser demo (Problem 1)
+
+Live canvas simulation of Vicsek dynamics. See [`demo/README.md`](demo/README.md).
+
+```bash
+open demo/index.html
+```
+
+Mirrors the Python update rules qualitatively, with sliders for η, R, v, and N plus live polarization P(t).
+
 ## Report
 
 The written report is in `report.pdf` (source: `report.md`). Regenerate the PDF after editing the Markdown:
@@ -39,3 +57,5 @@ pandoc report.md -o report.pdf --resource-path=.
 - `problem3_optimize.py` — grid search for `R`, `v` with `eta_c = 0.5`
 - `tests/test_vicsek.py` — unit tests for core simulation invariants
 - `report.md` / `report.pdf` — written report
+- `explorer/` — optional Streamlit interactive explorer (bonus)
+- `demo/` — optional browser canvas demo for Problem 1 dynamics (bonus)

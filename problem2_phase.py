@@ -83,7 +83,7 @@ def main() -> None:
     ax.plot(eta_down, psi_decreasing, "s-", label="eta decreasing", markersize=4)
     ax.set_xlabel("noise eta")
     ax.set_ylabel("stationary order parameter psi")
-    ax.set_title("Hysteresis check (ordered initial condition)")
+    ax.set_title("Hysteresis check: increasing vs decreasing eta")
     ax.set_ylim(0, 1.05)
     ax.grid(True, alpha=0.3)
     ax.legend()
