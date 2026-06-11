@@ -157,11 +157,22 @@ def load_dataset(path: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
 def load_problem3_point() -> tuple[float, float] | None:
     if not PROBLEM3_RESULTS.exists():
         return None
+
     values: dict[str, float] = {}
     for line in PROBLEM3_RESULTS.read_text(encoding="utf-8").splitlines():
-        if "=" in line:
-            key, raw = line.split("=", 1)
-            values[key.strip()] = float(raw.strip())
+        if "=" not in line:
+            continue
+
+        key, raw = line.split("=", 1)
+        raw = raw.strip()
+        if raw == "None":
+            continue
+
+        try:
+            values[key.strip()] = float(raw)
+        except ValueError:
+            continue
+
     if "optimized_R" in values and "optimized_v" in values:
         return values["optimized_R"], values["optimized_v"]
     return None
