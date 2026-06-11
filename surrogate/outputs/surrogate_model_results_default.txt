@@ -1,0 +1,19 @@
+grid_mode=default
+candidate_grid_size=49
+valid_dataset_size=29
+skipped_no_crossing=0
+note=Labels are stochastic; held-out set is small.
+
+Ridge_train_mae=0.020436
+Ridge_test_mae=0.026054
+RandomForestRegressor_train_mae=0.019261
+RandomForestRegressor_test_mae=0.016417
+GradientBoostingRegressor_train_mae=0.000638
+GradientBoostingRegressor_test_mae=0.024062
+
+best_model=RandomForestRegressor
+surrogate_best_R=1.010204
+surrogate_best_v=0.844898
+surrogate_predicted_eta_c=0.557484
+problem3_optimized_R=0.700000
+problem3_optimized_v=0.800000

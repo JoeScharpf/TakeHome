@@ -41,6 +41,14 @@ open demo/index.html
 
 Mirrors the Python update rules qualitatively, with sliders for η, R, v, and N plus live polarization P(t).
 
+## Bonus: ML surrogate for eta_c
+
+Lightweight regression surrogate predicting critical noise eta_c from (R, v). See [`surrogate/README.md`](surrogate/README.md).
+
+```bash
+MPLBACKEND=Agg python surrogate/train.py
+```
+
 ## Report
 
 The written report is in `report.pdf` (source: `report.md`). Regenerate the PDF after editing the Markdown:
@@ -59,3 +67,4 @@ pandoc report.md -o report.pdf --resource-path=.
 - `report.md` / `report.pdf` — written report
 - `explorer/` — optional Streamlit interactive explorer (bonus)
 - `demo/` — optional browser canvas demo for Problem 1 dynamics (bonus)
+- `surrogate/` — optional ML surrogate f(R, v) -> eta_c (bonus)
