@@ -35,6 +35,8 @@ streamlit run explorer/app.py
 
 Live canvas simulation of Vicsek dynamics. See [`demo/README.md`](demo/README.md).
 
+**Live demo:** https://vicsekdemo.vercel.app/
+
 ```bash
 open demo/index.html
 ```

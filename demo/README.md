@@ -4,6 +4,8 @@ Live **canvas simulation** of Vicsek flocking dynamics — a bonus visual compan
 
 Problems 2 and 3 (phase transition, optimization) remain in the Python scripts only.
 
+**Live demo:** https://vicsekdemo.vercel.app/
+
 ## Open the demo
 
 **Option A — double-click** `demo/index.html` in a browser (no server needed).
