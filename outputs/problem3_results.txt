@@ -1,0 +1,4 @@
+optimized_R=0.700000
+optimized_v=0.800000
+estimated_eta_c=0.517166
+objective_abs_error=0.017166
